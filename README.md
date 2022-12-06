@@ -103,3 +103,61 @@ Ejecutaremos el comando fly deploy
 Una vez haya terminado el despliegue ejecutaremos fly status para revisar el estado de nuestro despliegue
 Finalmente ejecutaremos fly open para ver la URL de nuestra API
 Es posible que al abrir la url nos salte un error, pero si nos dirigimos a '/api' podremos ver el mensaje de "hola mundo" que tenemos configurado
+
+InstaYa - Cliente Web
+Dependencias:
+Esta aplicación web se encuentra desarrollada con las siguientes tecnologías:
+
+vite, para compilar nuestro proyecto
+vite-plugin-svgr, para añadir iconos en formato .svg
+react, para definir la interfaz en forma de componentes reutilizables
+react-router, para definir las rutas y navegación de nuestras vistas
+react-toastify, para generar "notificaciones" en nuestras vistas
+lottie-react, para añadir animaciones en formato lottie
+@datepicker-react/hooks, para extrapolar la lógica de un calendario y solo preocuparnos en construir los componentes visuales
+axios, para consumir recursos REST por medio de peticiones http
+zod, para validar objetos json de una forma rápida y sencilla
+Y también cuenta con otras tecnologías para facilitar la experiencia como desarrollador:
+
+eslint, para validar estándares y reglas de formato en nuestro código
+prettier, para darle formato a nuestro código de forma automática
+tailwindcss, para estilizar nuestra interfaz gráfica
+husky, para ejecutar comandos antes de hacer commit con nuestros cambios
+lint-staged, para ejecutar comandos tomando en cuenta solo los archivos en el área de stage
+Comandos
+Este proyecto cuenta con los siguientes comandos:
+
+dev
+build
+preview
+lint
+lint:fix
+prettier:fix
+prettier:check
+Para ejecutar algún, por lo general usaremos npm run <comando>, estaremos trabajando la mayor parte del tiempo con el comando npm run dev.
+
+Configuración
+Entorno Local
+Es necesario configurar las variables de entorno del proyecto para que este pueda funcionar adecuadamente en un entorno local. Para esto, crearemos el archivo .env.development.local en la carpeta raíz del proyecto con el siguiente contenido:
+
+# .env.development
+
+VITE_API_URL=<Url a nuestra API>
+Entorno productivo
+Una vez realizado el paso de despliegue, debemos de configurar las variables de entorno en nuestro proyecto, para esto podemos ejecutar el comando netlify env:set VITE_API_URL <host_de_nuestra_api>.
+
+Despliegue
+Para realizar el despliegue estaremos siguiendo paso a paso las instrucciones en la página de vite.
+
+Necesitaremos crear una cuenta en Netlify, se puede usar una cuenta de Google o una cuenta de Github
+Descargaremos el cliente por consola de Netlify (Netlify CLI)
+Esto lo podemos hacer ejecutando el comando npm install netlify-cli -g
+Crearemos un nuevo sitio en Netlify con el comando ntl init, con esto Netlify CLI nos preguntara un par de cosas como:
+Nuestro usuario de Netlify, hará un proceso de inicio de sesión automatizado con nuestro navegador web, en el cual solo deberemos de seguir el paso a paso
+Nos va a preguntar si queremos actualizar un sitio o crear un sitio, por lo que aquí seleccionaremos Create & configure a new site
+El nombre de nuestro sitio, en este caso yo use: insta-ya
+El comando para compilar el proyecto: npm run build
+La carpeta donde se encuentran nuestros archivos compilados: dist
+Por ultimo, desplegaremos nuestro sitio con el comando ntl deploy, para esto seguiremos los siguientes pasos:
+Se nos generara una URL de borrador donde se encuentra nuestro sitio.
+Si todo se ve bien en nuestro borrador entonces ejecutaremos el comando netlify deploy --prod, con el motivo de realizar una entrega o release de nuestros cambios a productivo.
