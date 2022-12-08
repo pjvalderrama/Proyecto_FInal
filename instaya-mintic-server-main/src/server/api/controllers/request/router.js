@@ -1,5 +1,5 @@
 import express from 'express';
-import { findRequestsByUser, findRequestsByUser, updateRequestsByservice, saveRequest } from '@models/Request/queries';
+import { findRequestsByUser, findByService, updateRequestByService, saveRequest } from '@models/Request/queries';
 import { logger, validate } from '../../middlewares';
 import { hasSession } from '../../middlewares/authorization';
 import { newRequestSchema,  serviceQuerySchema, updateRequestSchema} from './schemas';

@@ -8,8 +8,15 @@ export async function findByservice(service) {
 	return await Request.findOne({ serviceNumber: service });
 }
 
-export async function updateRequestsByservice(service, body) {
-	return await Request.findOneAndUpdate({ serviceNumber: service }, {...body}, {returnOriginal: false});
+export async function updateRequestByService(service, body) {
+	// const request = await findByService(service);
+	return await Request.findOneAndUpdate(
+		{ serviceNumber: service },
+		{ ...body },
+		{
+			returnOriginal: false,
+		},
+	);
 }
 
 export async function saveRequest(userId, body) {
