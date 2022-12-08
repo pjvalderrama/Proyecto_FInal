@@ -1,78 +1,67 @@
-import express from 'express';
-import { findRequestsByUser, findByService, updateRequestByService, saveRequest } from '@models/Request/queries';
-import { logger, validate } from '../../middlewares';
-import { hasSession } from '../../middlewares/authorization';
-import { newRequestSchema,  serviceQuerySchema, updateRequestSchema} from './schemas';
+import { z } from 'zod';
 
-const router = express.Router();
+const sharedNumberSchema = z
+	.string()
+	.min(1)
+	.refine((num) => !isNaN(num), { message: 'Not a number' })
+	.refine((num) => !isNaN(num) && parseInt(num) > 0, {
+		message: 'Must be greater than 0',
+	});
 
-router.use(logger);
+const requestParams = z.object({ service: sharedNumberSchema });
 
-router.get('/find-all', hasSession, async (req, res) => {
-	try {
-		const query = await findRequestsByUser(req.session_payload.id);
+export const serviceQuerySchema = z.object({ params: requestParams });
 
-		res.status(200).json({ payload: query, message: 'Requests fetched' });
-	} catch (error) {
-		// eslint-disable-next-line no-console
-		console.error(error);
-		res.status(500).json(error.message);
-	}
+const sharedRequestBody = {
+	//isFragile: z.string().regex(/(true|false)/, { message: 'Not a boolean' }),
+	isFragile: z.boolean(),
+	width: sharedNumberSchema,
+	height: sharedNumberSchema,
+	depth: sharedNumberSchema,
+	weight: sharedNumberSchema,
+	fromCity: z.string().min(3).max(50),
+	fromAddress: z.string().min(3).max(100),
+	toCity: z.string().min(3).max(50),
+	toAddress: z.string().min(3).max(100),
+	toOwner: z.string().min(3).max(50),
+	toOwnerId: z
+		.string()
+		.min(3)
+		.max(11)
+		.refine((num) => !isNaN(num), { message: 'Not a number' })
+		.refine((num) => !isNaN(num) && parseInt(num) > 99, {
+			message: 'Minimum value is 100',
+		}),
+};
+
+const requestBody = z.object({
+	...sharedRequestBody,
+	due: z
+		.string()
+		.regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
+			message: 'Not a date',
+		})
+		.refine(
+			(dueStr) => {
+				const min = new Date(Date.now() + 24 * 60 * 60 * 1000); // plus 24h
+				const due = new Date(dueStr);
+
+				return due.getTime() >= min.getTime();
+			},
+			{ message: 'Too early!' },
+		),
 });
 
-router.post(
-	'/',
-	hasSession,
-	validate(newRequestSchema),
-	async ({ body, session_payload }, res) => {
-		try {
-			const payload = await saveRequest(session_payload.id, body);
+const updateBody = z.object({
+	...sharedRequestBody,
+	due: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/, {
+		message: 'Not a date',
+	}),
+});
 
-			res.status(200).json({ payload, message: 'Request saved!' });
-		} catch (error) {
-			// eslint-disable-next-line no-console
-			console.error(error);
-			res.status(500).json(error.message);
-		}
-	},
-);
+export const newRequestSchema = z.object({ body: requestBody });
 
-router.get(
-	'/find-by/service/:service',
-	hasSession,
-	validate(serviceQuerySchema),
-	async ({ params }, res) => {
-		try {
-			const { service } = params;
-			const query = await findByService(service);
-
-			res.status(200).json({ payload: query, message: 'Request fetched' });
-		} catch (error) {
-			// eslint-disable-next-line no-console
-			console.error(error);
-			res.status(500).json(error.message);
-		}
-	},
-);
-
-router.put(
-	'/update-by/service/:service',
-	hasSession,
-	validate(updateRequestSchema),
-	async ({ body, params }, res) => {
-		try {
-			const { service } = params;
-			// eslint-disable-next-line no-console
-			console.log({ service, body });
-			const payload = await updateRequestByService(service, body);
-
-			res.status(200).json({ payload, message: 'Request updated!' });
-		} catch (error) {
-			// eslint-disable-next-line no-console
-			console.error(error);
-			res.status(500).json(error.message);
-		}
-	},
-);
-
-export { router };
+export const updateRequestSchema = z.object({
+	params: requestParams,
+	body: updateBody,
+});

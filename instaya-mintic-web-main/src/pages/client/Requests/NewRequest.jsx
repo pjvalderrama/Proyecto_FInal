@@ -26,7 +26,7 @@ export async function action({ request }) {
 		await doRequest({
 			body,
 			endpoint: addNewRequest,
-			success: 'Se ha guardado su solicitud!',
+			success: 'Se ha guarado su solicitud!',
 		});
 
 		return redirect('/client/requests');

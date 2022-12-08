@@ -64,9 +64,8 @@ export function Requests() {
 						>
 							Añadir solicitud
 						</Link>
-						
+
 						{isEmpty ? <Empty /> : <RequestTable requests={requests} />}
-						
 					</div>
 
 					<Divider />

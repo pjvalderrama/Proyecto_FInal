@@ -1,1 +1,6 @@
-export { findAll, addNewRequest, findByService, updateByService} from './request';
+export {
+	findAll,
+	findByService,
+	addNewRequest,
+	updateByService,
+} from './request';

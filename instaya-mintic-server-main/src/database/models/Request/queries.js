@@ -4,19 +4,8 @@ export async function findRequestsByUser(userId) {
 	return await Request.find({ fromOwner: userId });
 }
 
-export async function findByservice(service) {
+export async function findByService(service) {
 	return await Request.findOne({ serviceNumber: service });
-}
-
-export async function updateRequestByService(service, body) {
-	// const request = await findByService(service);
-	return await Request.findOneAndUpdate(
-		{ serviceNumber: service },
-		{ ...body },
-		{
-			returnOriginal: false,
-		},
-	);
 }
 
 export async function saveRequest(userId, body) {
@@ -54,4 +43,15 @@ export async function saveRequest(userId, body) {
 	const request = new Request(payload);
 	await request.save();
 	return request;
+}
+
+export async function updateRequestByService(service, body) {
+	// const request = await findByService(service);
+	return await Request.findOneAndUpdate(
+		{ serviceNumber: service },
+		{ ...body },
+		{
+			returnOriginal: false,
+		},
+	);
 }
