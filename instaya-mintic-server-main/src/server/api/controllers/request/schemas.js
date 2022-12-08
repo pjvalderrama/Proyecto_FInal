@@ -13,7 +13,8 @@ const requestParams = z.object({ service: sharedNumberSchema });
 export const serviceQuerySchema = z.object({ params: requestParams });
 
 const sharedRequestBody = {
-	isFragile: z.string().regex(/(true|false)/, { message: 'Not a boolean' }),
+	//isFragile: z.string().regex(/(true|false)/, { message: 'Not a boolean' }),
+	isFragile: z.boolean(),
 	width: sharedNumberSchema,
 	height: sharedNumberSchema,
 	depth: sharedNumberSchema,

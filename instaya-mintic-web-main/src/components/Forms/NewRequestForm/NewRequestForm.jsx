@@ -11,19 +11,19 @@ import {
 
 const initialValues = {
 	isFragile: true,
-	width: '1',
-	height: '1',
-	depth: '1',
-	weight: '1',
-	dueDate: '2022-12-01',
-	dueHour: '12:00:00',
+	width: '',
+	height: '',
+	depth: '',
+	weight: '',
+	dueDate: '',
+	dueHour: '',
 	state: 'guardado',
-	fromCity: 'Barranquilla',
-	fromAddress: 'Cra. 45 #53-127',
-	toCity: 'Santa Marta',
-	toAddress: 'Cl. 21 #2A-05',
-	toOwner: 'Pepé Santos',
-	toOwnerId: '12345678901',
+	fromCity: '',
+	fromAddress: '',
+	toCity: '',
+	toAddress: '',
+	toOwner: '',
+	toOwnerId: '',
 };
 
 export const formFields = [

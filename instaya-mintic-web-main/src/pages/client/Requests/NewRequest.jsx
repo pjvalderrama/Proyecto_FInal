@@ -12,7 +12,7 @@ export async function action({ request }) {
 	const formData = await request.formData();
 	const body = parseFormData(formData, newRequestFields);
 
-	// body.isFragile = body.isFragile === 'true' ? true : false;
+	body.isFragile = body.isFragile === 'true' ? true : false;
 
 	const dueWithoutOffset = new Date(`${body.dueDate}T${body.dueHour}.000Z`);
 	const due = new Date(
@@ -26,7 +26,7 @@ export async function action({ request }) {
 		await doRequest({
 			body,
 			endpoint: addNewRequest,
-			success: 'Se ha guarado su solicitud!',
+			success: 'Se ha guardado su solicitud!',
 		});
 
 		return redirect('/client/requests');
