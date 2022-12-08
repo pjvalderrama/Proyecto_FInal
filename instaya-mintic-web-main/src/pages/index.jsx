@@ -9,6 +9,7 @@ import {
 } from './client/Requests/NewRequest';
 import {
 	UpdateRequest,
+	loader as loadRequestDetail,
 	action as updateRequestAction,
 } from './client/Requests/UpdateRequest';
 
@@ -60,7 +61,8 @@ export const appRoutes = [
 								action: newRequestAction,
 							},
 							{
-								path: 'update',
+								path: ':serviceNumber',
+								loader: loadRequestDetail,
 								element: <ProtectedRoute route={<UpdateRequest />} />,
 								action: updateRequestAction,
 							},

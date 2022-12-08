@@ -4,6 +4,14 @@ export async function findRequestsByUser(userId) {
 	return await Request.find({ fromOwner: userId });
 }
 
+export async function findByservice(service) {
+	return await Request.findOne({ serviceNumber: service });
+}
+
+export async function updateRequestsByservice(service, body) {
+	return await Request.findOneAndUpdate({ serviceNumber: service }, {...body}, {returnOriginal: false});
+}
+
 export async function saveRequest(userId, body) {
 	const {
 		isFragile,
